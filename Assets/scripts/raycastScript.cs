@@ -3,62 +3,62 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
+[RequireComponent(requiredComponent: typeof(ARRaycastManager), requiredComponent2:typeof(ARPlaneManager))]
 public class raycastScript : MonoBehaviour
 {
-    public GameObject spawn_prefab;
-    GameObject spawned_object;
-    bool object_spawned;
-    ARRaycastManager arrayman;
-    List<ARRaycastHit> hits = new List<ARRaycastHit>();
-    
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private GameObject prefab;
+    private ARPlaneManager aRPlaneManager;
+    private ARRaycastManager aRRaycastManager;
+    private List<ARRaycastHit> hits = new List<ARRaycastHit>();
+    private bool isPlaced;
+    private void Awake()
     {
-        object_spawned = false;
-        arrayman = GetComponent<ARRaycastManager>();
+        isPlaced = false;
+        aRPlaneManager = GetComponent<ARPlaneManager>();
+        aRRaycastManager = GetComponent<ARRaycastManager>();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        if (Input.touchCount > 0) {
-            if (arrayman.Raycast(Input.GetTouch(0).position, hits, TrackableType.PlaneWithinPolygon)) {
-                var hitpose = hits[0].pose;
-                if (!object_spawned)
-                {
-                    spawned_object = Instantiate(spawn_prefab, hitpose.position, hitpose.rotation);
-                    //spawned_object.BroadcastMessage("rebuild_AssetFlex");
-                    object_spawned = true;
-                }
-                else {
-                    Destroy(spawned_object.gameObject);
-                    spawned_object = null;
-                    spawned_object = Instantiate(spawn_prefab, hitpose.position, hitpose.rotation);
-                    //spawned_object.BroadcastMessage("rebuild_AssetFlex");
-                    //spawned_object.transform.position = hitpose.position;
-                }
-            }
-        }
+        EnhancedTouch.TouchSimulation.Enable();
+        EnhancedTouch.EnhancedTouchSupport.Enable();
+        EnhancedTouch.Touch.onFingerDown += FingerDown;
+    }
+    private void OnDisable()
+    {
+        EnhancedTouch.TouchSimulation.Disable();
+        EnhancedTouch.EnhancedTouchSupport.Disable();
+        EnhancedTouch.Touch.onFingerDown -= FingerDown;
 
-    #if UNITY_EDITOR
-        if (Input.GetMouseButtonDown(0))
+    }
+
+    private void FingerDown(EnhancedTouch.Finger finger) {
+        if (finger.index != 0) return;
+        if (!isPlaced)
         {
+            Place_Prefab(finger);
+        }
+        else {
+            CheckInteractuable(finger);
+        }
+    }
+    private void CheckInteractuable(EnhancedTouch.Finger finger) { 
+    
+    }
+    private void Place_Prefab(EnhancedTouch.Finger finger) {
+        if (aRRaycastManager.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon))
+        {
+            foreach (ARRaycastHit hit in hits)
             {
-                if (!object_spawned)
-                {
-                    spawned_object = Instantiate(spawn_prefab, Vector3.zero, Quaternion.identity);
-                    object_spawned = true;
-                }
-                else
-                {
-                    Destroy(spawned_object.gameObject);
-                    spawned_object = null;
-                    spawned_object = Instantiate(spawn_prefab,Vector3.zero, Quaternion.identity);
-                    //spawned_object.BroadcastMessage("rebuild_AssetFlex");
-                    //spawned_object.transform.position = hitpose.position;
-                }
+                Pose pose = hit.pose;
+                GameObject obj = Instantiate(prefab, pose.position, pose.rotation);
+                isPlaced = true;
             }
         }
-    #endif
     }
+
+    
 }
