@@ -11,10 +11,11 @@ public class LevelSpawner : MonoBehaviour
     List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
 
     [SerializeField]
-    GameObject spawnablePrefab,Food;
+    GameObject spawnablePrefab, Food;
     [SerializeField]
     Camera arCam;
     Transform Food_heightAncor;
+    LevelManager levManager;
 
     private bool levelSet;
     int food_Limit;
@@ -27,6 +28,7 @@ public class LevelSpawner : MonoBehaviour
         //TouchedObject = null;
         levelSet = false;
         food_Limit = 20;
+        levManager = this.GetComponent<LevelManager>();
         //arCam = GameObject.Find("AR Camera").GetComponent<Camera>();
     }
 
@@ -44,15 +46,8 @@ public class LevelSpawner : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider.gameObject.tag == "Coin")
-                    {
-                        hit.transform.GetComponent<CoinScript>().IncreaseScore();
-                    }
-                    else if (hit.collider.gameObject.tag == "Trash")
-                    {
-                        hit.transform.GetComponent<TrashScript>().life_Reduction();
-                    }
-                    else if (!levelSet) { // Put level prefab if the level is not set yet
+                    if (!levelSet) { // Put level prefab if the level is not set yet
+                        levelSet = true;
                         SpawnPrefab(m_Hits[0].pose.position, spawnablePrefab);
                         Food_heightAncor = GameObject.FindGameObjectWithTag("HeightAnchor").transform;
                         var planes = aRPlaneManager.trackables;
@@ -61,47 +56,40 @@ public class LevelSpawner : MonoBehaviour
                             plane.gameObject.SetActive(false);
                         }
                         aRPlaneManager.enabled = false;
+                        LevelManager.Fill_lists();
                     }
                     else if (levelSet) // Put food instead of prefab of level
                     {
-                        if(current_Food<food_Limit) {
+                        if (current_Food < food_Limit) {
                             current_Food++;
                             Instantiate(Food, m_Hits[0].pose.position + Food_heightAncor.position.y * Vector3.up, Random.rotation, this.transform.parent);
-                            levelSet = true;
                         }
                     }
                 }
             }
-           
+
         }
 
-#if UNITY_EDITOR
-
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit2;
-        if (Physics.Raycast(ray, out hit2)) {
-            if (hit2.collider.gameObject.tag == "Coin")
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            if (Physics.Raycast(ray, out hit))
             {
-                hit2.transform.GetComponent<CoinScript>().IncreaseScore();
-            }
-            else if (hit2.collider.gameObject.tag == "Trash")
-            {
-                hit2.transform.GetComponent<TrashScript>().life_Reduction();
-            }
-            else if (current_Food < food_Limit)
-            {
-                current_Food++;
-                Instantiate(Food, hit2.point + Food_heightAncor.position.y * Vector3.up, Random.rotation, this.transform.parent);
-                levelSet = true;
+                if (hit.collider.gameObject.tag == "Coin")
+                {
+                    hit.transform.GetComponent<CoinScript>().IncreaseScore();
+                    levManager.updateScoreScreen();
+                }
+                else if (hit.collider.gameObject.tag == "Trash")
+                {
+                    hit.transform.GetComponent<TrashScript>().life_Reduction();
+                }
             }
         }
+        }
 
-#endif
-    }
-
-    private void SpawnPrefab(Vector3 spawnPosition, GameObject spawnablePrefab) {
-        Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
-    }
+        private void SpawnPrefab(Vector3 spawnPosition, GameObject spawnablePrefab) {
+            Instantiate(spawnablePrefab, spawnPosition, Quaternion.identity);
+        }
 
 
-}
+    } 

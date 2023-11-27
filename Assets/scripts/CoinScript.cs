@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class CoinScript : MonoBehaviour
 {
-    //Rigidbody myRgb;
-
+    [SerializeField]
+    float timeLimit;
+    float TimePassed;
     private void Start()
     {
-        //myRgb = this.GetComponent<Rigidbody>();
-        //myRgb.velocity = Vector3.up * -MyVelocity;
+        TimePassed = 0.0f;
+    }
+    private void Update()
+    {
+        TimePassed += Time.deltaTime;
+        if (TimePassed > timeLimit)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void IncreaseScore() {
         LevelManager.CoinCounter++;
-        Destroy(this.gameObject, 0.1f);
+        Destroy(this.gameObject);
         //Play Soun of Coin
     }
 

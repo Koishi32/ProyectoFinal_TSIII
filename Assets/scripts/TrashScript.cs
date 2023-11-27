@@ -5,6 +5,8 @@ using UnityEngine;
 public class TrashScript : MonoBehaviour
 {
     int life;
+    [SerializeField]
+    GameObject Efect;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +17,10 @@ public class TrashScript : MonoBehaviour
     void Update()
     {
         if (life < 0) {
-            Destroy(this.gameObject, 0.5f);
+            Debug.Log("BagDestroyed");
+            var party = Instantiate(Efect, transform.position, Quaternion.identity);
+            Destroy(party.gameObject,1);
+            Destroy(this.gameObject);
         }
     }
 
@@ -30,7 +35,9 @@ public class TrashScript : MonoBehaviour
         {
             // hurt sound
             Debug.Log(collision.collider.gameObject.name);
-            Destroy(collision.gameObject);
+            var party = Instantiate(Efect, transform.position, Quaternion.identity);
+            Destroy(party.gameObject, 1);
+            collision.collider.GetComponentInChildren<SpeciesScript>().deactivateSelf();
             Destroy(this.gameObject);
         }
     }
