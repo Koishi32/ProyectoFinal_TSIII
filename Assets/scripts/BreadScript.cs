@@ -15,6 +15,7 @@ public class BreadScript : MonoBehaviour
     {
         TimePassed += Time.deltaTime;
         if (TimePassed> timeLimit) {
+            LevelSpawner.current_Food--;
             Destroy(this.gameObject);
         }
     }

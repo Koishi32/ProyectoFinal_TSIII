@@ -10,7 +10,7 @@ public class TrashScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        life = 3;
+        life = 1;
     }
 
     // Update is called once per frame

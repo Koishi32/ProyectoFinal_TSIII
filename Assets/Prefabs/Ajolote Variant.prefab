@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1596641056262015451}
   m_Layer: 0
   m_Name: Pos
-  m_TagString: Untagged
+  m_TagString: HeightAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

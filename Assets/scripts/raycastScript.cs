@@ -41,13 +41,8 @@ public class raycastScript : MonoBehaviour
         {
             Place_Prefab(finger);
         }
-        else {
-            CheckInteractuable(finger);
-        }
     }
-    private void CheckInteractuable(EnhancedTouch.Finger finger) { 
-    
-    }
+
     private void Place_Prefab(EnhancedTouch.Finger finger) {
         if (aRRaycastManager.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon))
         {
@@ -57,6 +52,15 @@ public class raycastScript : MonoBehaviour
                 GameObject obj = Instantiate(prefab, pose.position, pose.rotation);
                 isPlaced = true;
             }
+            LevelSpawner.levelSet = true;
+            Time.timeScale = 1;
+            var planes = aRPlaneManager.trackables;
+            foreach (var plane in planes)
+            {
+                plane.gameObject.SetActive(false);
+            }
+            //aRPlaneManager.enabled = false;
+            LevelManager.Fill_lists();
         }
     }
 

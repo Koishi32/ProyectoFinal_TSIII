@@ -87,7 +87,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         else {
-            LevelManager.CoinCounter -= 10;
+            LevelManager.CoinCounter -= 1;
             AddAnimal();
         }
         

@@ -260,6 +260,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 3518818133566265287, guid: 319d44bf21f83a942bf221f4f9f53988,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.435
+      objectReference: {fileID: 0}
     - target: {fileID: 4338453740336375152, guid: 319d44bf21f83a942bf221f4f9f53988,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -319,6 +324,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.0000021616318
+      objectReference: {fileID: 0}
+    - target: {fileID: 7648844320147239824, guid: 319d44bf21f83a942bf221f4f9f53988,
+        type: 3}
+      propertyPath: m_TagString
+      value: HeightAnchor
       objectReference: {fileID: 0}
     - target: {fileID: 8106723220480263091, guid: 319d44bf21f83a942bf221f4f9f53988,
         type: 3}
@@ -386,3 +396,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &5781380690151196622 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7648844320147239824, guid: 319d44bf21f83a942bf221f4f9f53988,
+    type: 3}
+  m_PrefabInstance: {fileID: 4187697262519923806}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9181304381099680593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5781380690151196622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95056dc5eacfb5240aa4c7ead3fb57be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
